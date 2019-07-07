@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+    {% block content %}
+    
+    <div class="row">
+
+    <div class = "col-sm-8"> <h4> Locations </h4> </div>
+    <div class = "col-sm-4"> <a href = "/locations/add"> Add Location <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> </a> </div>
+
+    {%for location in data.each()%} 
+
+    <div class="card" style="width: 18rem;">
+         <div class="card-body">
+                {% print( location.key() ) %}
+            <h6 class="card-title boldme"> {% print( location.val()["name"] ) %} </h6>
+            <p class="card-text"> {% print( location.val()["location"] ) %} </p>
+            <a href="locations/edit/{% print( location.key() ) %}" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+    
+    {%endfor%} 
+    </div>
+    
+    {% endblock %}

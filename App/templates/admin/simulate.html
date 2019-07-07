@@ -1,0 +1,61 @@
+{% extends "template.html" %}
+  {% block content %}
+
+  <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h2 class="display-4"> System Simulation (BETA) </h2>
+    <p class="lead"> Create a new simulation to generate drivers and users. </p>
+  </div>
+
+  {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger">{{ message }}</div> 
+  {% endfor %}
+  
+
+  <div class="container">
+      <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h6 class="my-0 font-weight-normal"> Students </h6>
+          </div>
+          <div class="card-body">
+            <p> Generates 20 new students eligible to get the bus. </p>
+            <a href="/simulate_students" class="btn btn-md btn-block btn-outline-primary"> Run </a>
+          </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h6 class="my-0 font-weight-normal"> Drivers </h6>
+          </div>
+          <div class="card-body">
+            <p> Generates 8 drivers with a variation of a few drivers being disabled</p>
+            <a href="/simulate_driver" class="btn btn-md btn-block btn-outline-primary"> Run </a>
+          </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h6 class="my-0 font-weight-normal"> Generate Logs </h6>
+          </div>
+          <div class="card-body">
+            <p> Based on the students and the drivers generated, we will create logs of them using the shuttle system with added variation of the shuttle not working, being late and other real life situations that occur on campus. </p>
+            <a href = "/simulate_logs" class="btn btn-md btn-block btn-outline-primary"> Run </a>
+          </div>
+        </div>
+      </div>
+
+      <p> Please note that fake data will be generated and these users will be added to the firebase system with emails, username </p>
+
+    </div>
+
+    <!--{% for i in logs: %}
+        {% print( logs[1].to_dict() ) %} <br/><br/>
+        {% for m in logs[1].to_dict(): %}
+            {% print( logs[1].to_dict()[m] ) %} <br/><br/>
+            {% print( "PASSENGERS_LEFT " ) %}
+            {% print( logs[1].to_dict()[m]['PASSENGERS_LEFT'] ) %} <br/><br/>
+            {% print( "PASSENGERS " ) %}
+            {% print( logs[1].to_dict()[m]['PASSENGERS'] ) %} <br/><br/>
+        {% endfor %}
+    {% endfor %}-->
+
+  {% endblock %}

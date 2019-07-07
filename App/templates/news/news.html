@@ -1,0 +1,119 @@
+{% extends "template.html" %}
+    {% block content %}
+
+    <style> .nobottom{margin-bottom:0px;} </style>
+
+    <div class="jumbotron">
+        <div class="row">
+            
+            
+            
+            <div class = "col-sm-12">
+
+                    <div class="offset-md-1 col-sm-8 form-group mb-2 nopadding">
+
+                    <div class = "col-sm-12 nopadding">
+                        {% if keyword %}
+                            You searched for: <span class = "boldme">{% print(keyword) %}</span>
+                            {% print(newsFilteredCount) %} Results found 
+                        {% endif %}
+                    </div>
+                            
+                      <h6 class="boldme"> Search for a News Article by Name </h6>
+                    </div>
+                <form class="form-inline" method = "POST" action = "{{ url_for('news_search') }}">
+                    <div class="offset-md-1 col-sm-8 form-group mb-2 nopadding">
+                        <input type="text" class="col-sm-12 form-control" name = "keyword" placeholder="Search ...">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2"> Search </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <br/><br/>
+
+    <div class="row">
+
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-success">{{ message }}</div> 
+        {% endfor %}
+    
+    </div>
+    <div class="row">
+        
+        
+    <div class = "col-sm-8"> <h4> All News </h4> </div>
+    <div class = "col-sm-4 text-right"> <a href = "/news/add"> Add News <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> </a> </div>
+
+    {% if newsFiltered: %} 
+        {%for news in newsFiltered %} 
+        <div class="col-sm-12 card-wrap">
+                <div class="card">
+                    <div class="card-body">
+        
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h6 class=" boldme"> {% print( news[1]["TITLE"] ) %} </h6>
+                            </div>
+                           <!-- <div class="col-sm-4 remove-control text-right" onclick="removeItem('{% print( news.id ) %}')" id = "Item_{% print( news.id ) %}"> <ion-icon name="close"></ion-icon> </div>-->
+                        </div>
+        
+                        <p class="card-text"> 
+                            {% print( news[1]["DESCRIPTION"] ) %}
+                        </p>
+                        <a href="/news/update/{% print( news[0] ) %}" class="btn btn-primary btn-sm">Edit</a>
+                        <!--<a href="news/delete/{% print( news.id ) %}" id = "remove_{% print( news.id ) %}" class="hidden-remove btn btn-outline-danger btn-sm float-right"> <ion-icon name="trash"></ion-icon> Delete. Are Your Sure? </a>
+        -->
+                    </div>
+                </div>
+            </div>
+        {%endfor%} 
+    {% endif %}
+
+    {% if newsFilteredCount == 0: %} 
+    {%for news in newsArticles %} 
+            
+    <div class="col-sm-12 card-wrap nobottom">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h6 class="card-title"> {% print( news.to_dict()["TITLE"] ) %} </h6>
+                    </div>
+                    <div class="col-sm-4 remove-control text-right" onclick="removeItem('{% print( news.id ) %}')" id = "Item_{% print( news.id ) %}"> <ion-icon name="close"></ion-icon> </div>
+                </div>
+
+                <p class="card-text"> 
+                    {% print( news.to_dict()["DESCRIPTION"] ) %}
+                </p>
+                <a href="news/update/{% print( news.id ) %}" class="card-link">Edit</a>
+                <a href="news/delete/{% print( news.id ) %}" id = "remove_{% print( news.id ) %}" class="hidden-remove btn btn-outline-danger btn-sm float-right"> <ion-icon name="trash"></ion-icon> Delete. Are Your Sure? </a>
+
+            </div>
+        </div>
+    </div>
+    
+    {%endfor%} 
+    {% endif %}
+    </div>
+    
+
+  <script>
+    
+        function removeItem(itemid){
+    
+          if( $("#remove_" + itemid).hasClass("hidden-remove") ){
+            $("#remove_" + itemid).removeClass("hidden-remove");
+            $("#Item_"+ itemid).html('Cancel');
+          }else{
+            $("#remove_" + itemid).addClass("hidden-remove");
+            $("#Item_"+ itemid).html('<ion-icon name="close"></ion-icon>');
+          }
+          
+        }
+      </script>
+
+    {% endblock %}

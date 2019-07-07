@@ -1,0 +1,185 @@
+{% extends "template.html" %}
+{% block content %}
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+  <div class = "row">
+    <div class = "col-sm-7">
+    <h4> New Shuttle Stand </h4>
+    
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-danger">{{ message }}</div> 
+    {% endfor %}
+    
+    {% print(error) %}
+
+    <form class="pt-3 needs-validation" id = "routesForm" action = "/routes/add-new" method="POST"> 
+
+        <div class="mb-3">
+          <label for="username">Shuttle Name <pan class = "required"> * </span></label>
+          <input type="text" class="form-control" id="name" name = "name" value = "" placeholder="Gaobo Gate 2 to Suzhou Station" required>
+          <div class="invalid-feedback" style="width: 100%;">
+              Shuttle Name is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description">Description <span class="text-muted"> (optional) </span></label>
+            <textarea class="form-control" id="description" rows="3" name = "description"> </textarea>
+          </div>
+
+        <div class="mb-3">
+          <label for="notes">Notes <span class="text-muted"> (optional) </span></label>
+          <textarea class="form-control" id="notes" rows="3" name = "notes"> </textarea>
+        </div>
+
+        <hr class="mb-4">
+
+        <h4> Geo Coordinates </h4>
+
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <label class="control-label"> Latitude </label>
+                <input id="latitude" name="latitude" type="text" required="required" class="form-control" autocomplete="off"/>
+                <p class="text-small"> For Example: 31.3274 <p>
+            </div>
+
+            <div class="col-sm-6">
+
+                <label class="control-label"> Longitude </label>
+                <input id="longitude" name="longitude" type="text" required="required" class="form-control" autocomplete="off"/>
+                <p class="text-small"> For Example: 120.4115 <p>
+            </div>
+        
+        </div>
+
+        <hr class="mb-4">
+
+        <h4> Shuttle Times </h4>
+        
+        <div class="row">
+
+          <div class="col-sm-9">
+            <!-- <label for="description">Times <span class="text-muted"> </span> <pan class = "required"> * </span> </label>
+            <textarea class="form-control" id="times" rows="3" name = "times"> </textarea>-->
+
+            <div class="row"> 
+
+                <div class="col-md-4">
+                  <div class="form-group bootstrap-timepicker">
+                      <label class="control-label">Start Time</label>
+                      <input id="start" name="start" type="text" required="required" class="form-control start" autocomplete="off"/>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group bootstrap-timepicker">
+                      <label class="control-label">End Time</label>
+                      <input id="end" name="end" type="text" required="required" class="form-control end" autocomplete="off"/>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group bootstrap-timepicker">
+                        <label class="control-label">Intervals</label>
+                        <select class="custom-select d-block w-100" id="interval" name = "interval">
+                          {% for interval in intervalOptions: %}
+                          <option selected>{% print(interval) %}</option>
+                          {% endfor %}
+                        </select>
+                  </div>
+                </div>
+
+              </div>
+
+          </div>
+
+          <div class="col-sm-3">
+            <label for="days"> Days <span class="text-muted"> </span> <pan class = "required"> * </span> </label>
+
+            <select class="custom-select d-block w-100" id="days" name = "days" required>
+                <option>Every Day</option>
+                <option>Monday - Friday</option>
+                <option>Saturday - Sunday</option>
+            </select>
+
+          </div>
+
+        </div>
+
+        <hr class="mb-4">
+        
+        <div class="row">
+
+          <div class="col-sm-12">
+            <label for="breaks">Breaks <span class="text-muted"> </span> <pan class = "required"> * </span> </label>
+            <textarea class="form-control" id="breaks" rows="3" name = "breaks"> </textarea>
+          </div>
+      
+        </div>
+    
+    
+        <button class="btn-complete btn btn-primary btn-lg btn-block" id = "Send" type="submit"> Create Shuttle </button>
+    
+    </form>
+
+    </div>
+
+    <div class="col-sm-4"> . </div>
+
+    </div>
+  
+  <script>
+
+    $('.start, .end').timepicker({
+          showInputs: false,
+        minuteStep: 1,
+      });
+    $( "#end, #start" ).change(function() {
+
+    var time = $("#start").val();
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1];
+    if(AMPM == "PM" && hours<12) hours = hours+12;
+    if(AMPM == "AM" && hours==12) hours = hours-12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if(hours<10) sHours = "0" + sHours;
+    if(minutes<10) sMinutes = "0" + sMinutes;
+    var time2 = $("#end").val();
+    if(time2=="")
+    {
+      var time2 = "00:00 AM";
+    }
+    var hours2 = Number(time2.match(/^(\d+)/)[1]);
+    var minutes2 = Number(time2.match(/:(\d+)/)[1]);
+    var AMPM2 = time2.match(/\s(.*)$/)[1];
+    if(AMPM2 == "PM" && hours2<12) hours2 = hours2+12;
+    if(AMPM2 == "AM" && hours2==12) hours2 = hours2-12;
+    var sHours2 = hours2.toString();
+    var sMinutes2 = minutes2.toString();
+    if(hours2<10) sHours2 = "0" + sHours2;
+    if(minutes2<10) sMinutes2 = "0" + sMinutes2;
+    //alert(sHours + ":" + sMinutes);
+    var comparehour = sHours2-sHours;
+    var comparemin = sMinutes2-sMinutes;
+    if(comparehour<0)
+    {
+      $("#end").val(time);
+    }
+    else if((comparehour==0) && (comparemin<0))
+    {
+      $("#end").val(time);
+    }
+    });
+
+
+
+  </script>
+
+{% endblock %}

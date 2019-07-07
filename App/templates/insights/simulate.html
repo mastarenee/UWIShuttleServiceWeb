@@ -1,0 +1,294 @@
+{% extends "template.html" %}
+{% block content %}
+<h4> Shuttle & Student Insights </h4>
+
+<div class="row">
+
+      <div class="col-sm-2 rate_wrap">
+
+        <span class = "rate_heading"> Registered Travallers </span>
+        <span class = "rate_metric"> {% print(registered_users) %} </span>
+        <small>  <span class="rate_metric_pos"> Eligible Persons </span> </small>
+
+      </div>
+
+      <div class="col-sm-2 rate_wrap">
+
+        <span class = "rate_heading"> In Arrears Travallers </span>
+        <span class = "rate_metric"> {% print(arrears_registered_users) %} </span>
+        <small>  <span class="rate_metric_neg"> Outstanding Payments </span> </small>
+
+      </div>
+
+      <div class="col-sm-2 rate_wrap">
+
+        <span class = "rate_heading"> Routes Completed </span>
+        <span class = "rate_metric"> 6/12 </span>
+        <small>  <span class="rate_metric_pos">+13.00%</span> (7 Days) </small>
+
+      </div>
+
+    </div>
+
+    <hr/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+    <style>
+      .bgwhite{
+        background:#fff;
+        padding:20px;
+        box-shadow: 1px 1px 1px #ddd;
+      }
+
+      .nopadding{
+        padding-left:0px !important;
+        padding-right:0px !important;
+      }
+
+      .caseIt{
+        background:#fff;
+        padding-top:10px;
+        padding-bottom:10px;
+        border-right:1px solid #eee;
+        border-bottom:1px solid #eee;
+      }
+
+      .caseIt:hover{
+        background:#fefdfd;
+        transition: all 0.5s ease-in-out;
+      }
+    </style>
+    <form>  
+    
+  <div class="row">
+  <div class="col-sm-8">
+    
+    <div class = "container nopadding">
+
+      <div class="row nopadding"> 
+        
+
+          <div class="col-sm-4 caseIt">
+            <label for = "filter_date"> Filter By Date </label>
+            <select id = "filter_date" name = "filter_date" class="form-control">
+              <option value = "1"> Today </option>
+              <option value = "7"> Last 7 Days </option>
+              <option value = "30"> Last Month </option>
+            </select>
+          </div>
+
+          <div class="col-sm-4 caseIt">
+              <label for = "filter_shuttle"> Filter By Shuttle </label>
+              <select id = "filter_shuttle" name = "filter_shuttle" class="form-control">
+
+                <option value = "all"> All Shuttles </option>
+                {% for i in shuttle_list %}
+                <option> {% print(i.id) %} </option>
+                {% endfor %}
+
+              </select>
+            </div>
+
+        
+      </div>
+    </div>
+    </form>
+   
+    <div class = "container nopadding">
+      <div class="row">
+      <div class="col-sm-12 bgwhite"> 
+          <canvas id="chart" width="100%" height="600"></canvas>
+      </div>
+    </div>
+
+    </div>
+
+
+  </div>
+
+  <div class = "col-sm-4"> 
+
+      <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+          <div class="card-header"> NiRO Insights </div>
+          <div class="card-body">
+              <p class="card-text"> Ask me a question or select one from below. </p>
+              <form> 
+                <input type = "text" name = "question" class = "form-control" id = "question" value = "">
+              </form>
+              <br/>
+              
+              <h6> Top questions </h6>
+
+              <p> Show me data from June 1 2019 to June 4 2019? </p>
+
+          </div>
+      </div>
+
+  </div>
+</div>
+        <!-- import plugin script -->   
+        <script src="{{ url_for('static',     filename='js/Chart.min.js') }}"></script>
+        <script src="{{ url_for('static',     filename='js/utils.js') }}"></script>
+  
+        <script>
+
+
+          // Get Todays Date
+          var todaysDate = moment().format("MMMM DD YYYY").toString();
+
+          function randomNumber(min, max) {
+            return Math.random() * (max - min) + min;
+          }
+      
+          function randomBar(date, lastClose) {
+            var open = randomNumber(lastClose * 0.95, lastClose * 1.05).toFixed(2);
+            var close = randomNumber(open * 0.95, open * 1.05).toFixed(2);
+            return {
+              t: date.valueOf(),
+              y: close
+            };
+          }
+
+          function randomDataSet(date, lastClose) {
+            var close = randomNumber(20).toFixed(2);
+            return {
+              t: date.valueOf(),
+              y: close
+            };
+          }
+          
+          today = moment().format("MMMM DD YYYY").toString();
+
+          var dateFormat = 'MMMM DD YYYY';
+          var date = moment('May 11 2019', dateFormat);
+          var data = [randomBar(date, 30)];
+          while (data.length < 60) {
+            date = date.clone().add(1, 'd');
+            if (date.isoWeekday() <= 5) {
+              data.push(randomBar(date, data[data.length - 1].y));
+            }
+          }
+      
+          var ctx = document.getElementById('chart').getContext('2d');
+          ctx.canvas.width = 1000;
+          ctx.canvas.height = 300;
+      
+          var color = Chart.helpers.color;
+          var cfg = {
+            type: 'bar',
+            data: {
+              datasets: [{
+                label: 'All Shuttles',
+                backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.blue,
+                data: data,
+                type: 'line',
+                pointRadius: 0,
+                fill: false,
+                lineTension: 0,
+                borderWidth: 2
+              }]
+            },
+            options: {
+              scales: {
+                xAxes: [{
+                  type: 'time',
+                  distribution: 'series',
+                  ticks: {
+                    source: 'data',
+                    autoSkip: true
+                  }
+                }],
+                yAxes: [{
+                  scaleLabel: {
+                    display: false,
+                    labelString: 'Student Count'
+                  }
+                }]
+              },
+              tooltips: {
+                intersect: false,
+                mode: 'index',
+                callbacks: {
+                  label: function(tooltipItem, myData) {
+                    var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+                    if (label) {
+                      label += ': ';
+                    }
+                    label += parseFloat(tooltipItem.value).toFixed(2);
+                    return label;
+                  }
+                }
+              }
+            }
+          };
+      
+          var chart = new Chart(ctx, cfg);
+
+          document.getElementById('filter_date').addEventListener('change', function() {
+            var date = document.getElementById('filter_date').value;
+            
+            // Set the past date you want to go back to
+            if (date == 1){
+              pastDate = moment().subtract(1, 'days').format("MMMM DD YYYY").toString();
+            }else if (date == 7){
+              pastDate = moment().subtract(7, 'days').format("MMMM DD YYYY").toString();
+            }else{
+              pastDate = moment().subtract(30, 'days').format("MMMM DD YYYY").toString();
+            }
+
+            // Init Date for chart js
+            var date = moment(pastDate, dateFormat);
+
+            // Create Random Data
+            var data = [{t: pastDate, y: 3}];
+
+            while ( pastDate <= todaysDate ){
+              //alert(pastDate);
+              pastDate = moment(pastDate).add(1, 'days').format("MMMM DD YYYY").toString();
+              data.push({t: pastDate, y: randomNumber(5,24)});
+            }
+
+            chart.config.data.datasets[0].data = data;
+            chart.update();
+          });
+
+          document.getElementById('filter_shuttle').addEventListener('change', function() {
+            var shuttle = document.getElementById('filter_shuttle').value;
+
+            /*if shuttle == "All Shuttles":
+            Campus to City
+            Campus to Graduate
+            Campus to Keith Hunte
+            NCF Round Trip
+            Warrens Round Trip */
+
+            chart.config.data.datasets[0].label = shuttle;
+
+            var date = moment('March 01 2019', dateFormat);
+            var data = [randomBar(date, 30)];
+            while (data.length < 60) {
+              date = date.clone().add(1, 'd');
+              if (date.isoWeekday() <= 5) {
+                data.push(randomBar(date, data[data.length - 1].y));
+              }
+            }
+            
+            chart.config.data.datasets[0].data = data;
+            chart.update();
+          });
+      
+        </script>
+
+      {% for i in logs %}
+        {% print(i.id) %}<br/>
+        {% print(i.to_dict()) %}<br/><br/>
+
+        {% for k, v in i.to_dict().items():  %}
+          {% print(v["passengerCount"]) %} <br/><br/>
+        {% endfor %}
+
+      {% endfor %}
+
+  {% endblock %}

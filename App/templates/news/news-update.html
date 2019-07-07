@@ -1,0 +1,39 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+
+  <div class="row">
+
+    <div class = "col-sm-8">
+      <h4> Article  {% print(news_info.to_dict()['TITLE']) %} </h4>
+    </div>
+
+    <div class = "col-sm-8 card shadow">    
+      <div class="card-body">
+        
+    <form class="pt-3 needs-validation" id = "newsForm" action = "{{ url_for('news_update', id = id) }}" method="POST"> 
+
+    <div class="mb-3">
+      <label class="boldme">Title</label>
+      {{ form.name(class_='form-control', value= news_info.to_dict()['TITLE'] ) }}
+    </div>
+
+    <div class="mb-3">
+      <label class="boldme">Description <span class="text-muted">(Optional)</span></label>
+      <p> {% print(news_info.to_dict()['DESCRIPTION']) %} </p>
+    </div>
+
+    <div class = "row">
+      <div class="col-sm-6">
+        <label class="boldme">Expiry </label>
+        {{ form.expires(class_='form-control', value= news_info.to_dict()['DATE'], readonly = True ) }}
+        <p class = "text-small"> Time for news to be displayed to the students </p>
+      </div>
+    </div>
+    
+    </form>
+    </div>
+  </div>
+
+  </div>
+  {% endblock %}

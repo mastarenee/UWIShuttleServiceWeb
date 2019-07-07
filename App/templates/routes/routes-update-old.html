@@ -1,0 +1,204 @@
+{% extends "template.html" %}
+{% block content %}
+
+<style>
+    /* Always set the map height explicitly to define the size of the div
+    * element that contains the map. */
+    #map {
+        height: 300px;
+        width:100%;
+    }
+
+    .nopadding{
+      padding:0px !important;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<h4> Route Testing Route Name </h4>
+<p> Get Insights <img width = "15px" src = "{{ url_for('static',     filename='img/insight.svg') }}"> </p>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwuOMdmS1fHUiUju2mMm-_xdaYz9VDIi4&callback=initMap"
+async defer></script>
+
+<script src="{{ url_for('static',     filename='js/routejs.js') }}"></script>
+
+<script>
+    var map;
+    
+    function initMap() {
+
+        var myLatLng = {lat: -25.363, lng: 131.044};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: {lat: 0, lng: -180},
+          mapTypeId: 'terrain'
+        });
+
+        var flightPlanCoordinates = [
+          {lat: 37.772, lng: -122.214},
+          {lat: 21.291, lng: -157.821},
+          {lat: -18.142, lng: 178.431},
+          {lat: -27.467, lng: 153.027}
+        ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#007bff',
+          strokeOpacity: 0.8,
+          strokeWeight: 4
+        });
+
+        flightPath.setMap(map);
+    }
+
+  </script>
+
+<section class="nopadding jumbotron text-center">
+  <div id="map"></div>
+</section>
+
+<div class="row">
+
+    <form class="pt-3 needs-validation" id = "routesForm" action = "{{ url_for('routes_add') }}" method="POST"> 
+
+        <div class="mb-3">
+          <label for="username">Route Name</label>
+          <input type="text" class="form-control" id="route_name" name = "route_name" value = "{% print(route.val()['name']) %}" placeholder="routename" required>
+          <div class="invalid-feedback" style="width: 100%;">
+              Route Name is required.
+          </div>
+        </div>
+    
+        <div class="mb-3">
+          <label for="description">Description <span class="text-muted">(Optional)</span></label>
+          <textarea class="form-control" id="route_description" rows="3" name = "route_description"> {% print(route.val()['description']) %} </textarea>
+        </div>
+    
+        <hr class="mb-4">
+    
+        <h5> Location Stops </h5>
+    
+        <div class="row" id = "locations_group">
+    
+          <div id = "locations_group_select"></div>
+    
+          <div class="col-md-12 mb-3" class = "locations_group_option_0">
+            <select name = "departs" id = "location_stop" class = "form-control"> 
+              <option value = "none"> Select Option </option> 
+              {%for location in locations.each()%} 
+              <option value = "{% print( location.key() ) %}"> {% print( location.val()["name"] ) %} </option> 
+              {%endfor%} 
+            </select>
+            <div class="invalid-feedback">
+                Start Location required.
+            </div>
+          </div>
+    
+        </div>
+    
+        <hr class="mb-4">
+    
+        <h5> Schedule </h5>
+    
+        <div class="row">
+          
+          <div class="col-md-4 mb-3">
+            <label for="day"> Day </label>
+    
+            <div id = "day_wrap">
+
+                  <option> {% print( routeSchedules.key() ) %} </option> 
+
+              <div class = 'schedule_option schedule_option_0'> <input type = 'text' name = 'sched_day_selected' value = '{% print( routeSchedules["day"] ) %}' readonly></div>
+              
+            </div>
+    
+            <select class="custom-select d-block w-100" id="day" required>
+                <option>Every Day</option>
+                <option>Mon - Fri</option>
+                <option>Sat - Sun</option>
+                <option>Sunday</option>
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+            </select>
+          </div>
+    
+          <div class="col-md-4 mb-3">
+            <label for="status">From (Hour) </label>
+    
+            <div id = "from_hour_wrap">
+
+                <div class = 'schedule_option schedule_option_0' > <input type = 'text' name = 'sched_hour_selected' value = '' read-only></div>
+          
+            </div>
+    
+            <select class="custom-select d-block w-100" id="sched_hour" name="sched_hour" required>
+                <option>00</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+                <option>13</option>
+                <option>14</option>
+                <option>15</option>
+                <option>16</option>
+                <option>17</option>
+                <option>18</option>
+                <option>19</option>
+                <option>20</option>
+                <option>21</option>
+                <option>22</option>
+                <option>23</option>
+                <option>24</option>
+            </select>
+          </div>
+          
+          <div class="col-md-4 mb-3">
+            <label for="status">From (To)</label>
+    
+            <div id = "to_hour_wrap">
+                <div class = 'schedule_option schedule_option_0'> <input type = 'text' name = 'sched_min_selected' value = '' read-only></div>
+        
+            </div>
+    
+            <select class="custom-select d-block w-100" id="sched_min" name="sched_min" required>
+                <option>00</option>
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+                <option>30</option>
+                <option>45</option>
+            </select>
+          </div>
+          
+        </div>
+    
+        <button type = "button" class="btn btn-outline-primary" id = "addSchedule"> + Day and Hours of Operations </button>
+    
+    
+    
+        <button class="btn-complete btn btn-primary btn-lg btn-block" type="submit"> Create Route </button>
+        </form>
+        
+</div>
+
+{% endblock %}

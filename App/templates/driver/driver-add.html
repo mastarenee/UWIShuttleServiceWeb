@@ -1,0 +1,73 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+    <h4 class = "col-sm-12"> Add a New Driver </h4>
+
+    <div class = "col-sm-8 card shadow">
+        
+        <div class="card-body">
+        
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger">{{ message }}</div> 
+        {% endfor %}
+
+    <form class="needs-validation" method = "POST" action = "{{ url_for('drivers_add_new') }}" novalidate>
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label for="name"> {{ form.name.label }} </label>
+            {{ form.name(class_='form-control') }}
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 input-group mb-3">
+            <input type="text" class="form-control" id="email" name = "email" placeholder="john.doe" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">@hotmail.com</span>
+            </div>
+        </div>
+        <p class = "col-sm-12 text-small"> Please enter your email without the @hotmail.com</p>
+            
+        <div class="col-md-12 mb-3">
+            <label for="phone"> {{ form.telephone.label }} </label>
+            {{ form.telephone(class_='form-control') }}
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+            <label for="password"> {{ form.password.label }} </label>
+            {{ form.password(class_='form-control') }}
+        </div>
+            
+    
+        <div class="col-md-6 mb-3">
+            <label for="confirmpassword"> {{ form.confirmpassword.label }} </label>
+            {{ form.confirmpassword(class_='form-control') }}
+        </div>
+
+        <div class="col-sm-12">
+            <br/>
+            <strong> Password Requirements </strong><br/>
+            <p> 
+                Password should be at least 8 characters in length <br/>
+                Include a symbol !@#$%^& <br/>
+                Must include a number <br/>
+                Must include at least one Uppercase number <br/>
+            </p>
+        </div>
+        
+    </div>
+    
+    <hr class="mb-4">
+    <button class="btn btn-primary btn-lg btn-block" type="submit"> Add Driver </button>
+    </form>
+    </div>
+</div>
+<br/>
+<br/>
+
+    {% endblock %}

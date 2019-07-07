@@ -1,0 +1,103 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+
+    <div class="col-sm-8 card text-white bg-primary mb-3">
+        <div class="card-header row"> 
+            <div class="col-sm-2"> <img class = "round-card-photo" src="{% print( admin_info.photo_url ) %}"> </div>
+            <div class="col-sm-6"> 
+                    
+                <h4 class = "text-small text-left"> <br/>Account Details </h4>
+                <h4> {% print( admin_info.display_name ) %} </h4>
+            </div>
+            <div class="col-sm-3">
+
+                    <form class="needs-validation" enctype="multipart/form-data" method = "POST" action = "{{ url_for('admin_user_update_photo', id = adminID) }}" novalidate>
+    
+                        <input type=file name=myFile>
+                        <input type="submit" class = "btn btn-light btn-sm" value = "Change Photo">
+                    
+                    </form>
+
+            </div>
+        </div>
+    </div>
+        
+    <div class = "col-sm-8 card shadow">
+    
+        <div class="card-body">
+
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger">{{ message }}</div> 
+        {% endfor %}
+
+        {% for message in form.name.errors %}
+        <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+    <form class="needs-validation" enctype="multipart/form-data" method = "POST" action = "{{ url_for('admin_user_update', id = adminID) }}" novalidate>
+    
+    {{ form.hidden_tag() }}
+
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label for="name"> {{ form.name.label }} </label>
+            {{ form.name(class_='form-control', value=admin_info.display_name) }}
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label for="email"> {{ form.email.label }} </label> 
+            {{ form.email(class_='form-control', id = "email", value=admin_info.email) }}
+        </div>
+        
+        <div class="col-md-12 mb-3">
+            <label for="telephone"> {{ form.telephone.label }} </label> 
+            {{ form.telephone(class_='form-control', id = "telephone", value=admin_info.phone_number) }}
+            <p class="text-small"> For Example +15555550100 </p>
+        </div>
+
+    </div>
+    
+    <hr class="mb-4">
+
+    <div class="row">
+        <div class="col-sm-6"> 
+            <label for="password"> {{ form.password.label }} </label> 
+            {{ form.password(class_='form-control', id = "password") }}
+        </div>
+
+        <div class="col-sm-6"> 
+            <label for="confirmpassword"> {{ form.confirmpassword.label }} </label> 
+            {{ form.confirmpassword(class_='form-control', id = "confirmpassword") }}
+        </div>
+
+        <div class="col-sm-12">
+            <br/>
+            <strong> Password Requirements </strong><br/>
+            <p> 
+                Password should be at least 8 characters in length <br/>
+                Include a symbol !@#$%^& <br/>
+                Must include a number <br/>
+                Must include at least one Uppercase number <br/>
+            </p>
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div class="row"> 
+        <div class="col-sm-6"> 
+            <input type = "checkbox" id = "disabled" name = "disabled" value = "true">
+            <label for = "disabled"> Disable User </label>
+        </div>
+    </div>
+
+    <hr class="mb-4">
+    <button class="btn btn-primary btn-lg btn-block" type="submit" value = "{% print( admin_info.info ) %}"> Update Admin </button>
+    </form>
+    </div>
+</div></div> <br/><br/>
+
+    {% endblock %}

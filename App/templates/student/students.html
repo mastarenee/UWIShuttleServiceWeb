@@ -1,0 +1,91 @@
+{% extends "template.html" %}
+  {% block content %}
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+  
+  <!--<div class="row">
+        
+      <div class = "col-sm-12">
+          {% if keyword %}
+              You searched for: <span class = "boldme">{% print(keyword) %}</span>
+              {% print(studentsFilteredCount) %} Results found 
+          {% endif %}
+      </div>
+      
+      <div class = "col-sm-12">
+          <form class="form-inline" method = "POST" action = "{{ url_for('students_search') }}">
+              <div class="form-group mb-2">
+                  <input type="text" class="form-control" name = "keyword" placeholder="Search ...">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2"> Search </button>
+          </form>
+      </div>
+
+  </div>
+
+  <br/><br/>-->
+
+  <div class = "row">
+
+    <div class="col-sm-12"> 
+      <div class="row">
+      <div class = "col-sm-8"> <h4> Students </h4> </div>
+      <div class = "col-sm-4 text-right"> <a href = "{{ url_for('students_add') }}"> New Student <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> </a> </div>
+     </div>
+    </div>
+
+    <div class="col-sm-12">
+      
+      <div class="card padding">
+      <div class="table-responsive">
+        <table class = "table table-hover display" style="width:100%" id = "studentRecords"> 
+          <thead>
+            <tr>
+              <th scope="col" width = "50">  </th>
+              <th scope="col"> ID </th>
+              <th scope="col"> Name </th>
+              <th scope="col"> Level </th>
+              <th scope="col"> Actions </th>
+            </tr>
+          </thead>
+          <!-- For loop logic of jinja template -->
+          
+          <tbody>
+      
+            {%for student in studentList: %}
+              {% if student != "DATABASE_AVAILABLE"  %}
+              <tr> 
+                
+                {% if studentList[student]["ARREARS"]: %}
+                  <td> <img class = 'student_image student_image_arrears' src = '{% print( studentList[student]["IMAGE_URL"] ) %}' > </td>
+                {% else: %}
+                  <td> <img class = 'student_image student_image_regular' src = '{% print( studentList[student]["IMAGE_URL"] ) %}' > </td>
+                {% endif %}
+
+                <td> {% print( studentList[student]["UID"] ) %} </td>
+                <td> {% print( studentList[student]["NAME"] ) %} </td>
+                <td> {% print( studentList[student]["LEVEL"] ) %} </td>
+                <td> <a href = "{{ url_for('students_update', id = student ) }}"> Edit </a> </td>
+              </tr>
+              {% endif %}
+            {%endfor%} 
+
+          </tbody>
+            
+        </table> 
+      </div>
+    </div>
+  </div>
+
+    <div class="col-sm-5"> . </div>
+  
+  </div>
+
+  <script>
+    $(document).ready( function () {
+      $('#studentRecords').DataTable();
+    });
+  </script>
+  {% endblock %}

@@ -1,0 +1,91 @@
+{% extends "template.html" %}
+    {% block content %}
+   
+    <div class="row">
+        
+        <div class="col-sm-6">
+        
+            <a href = "/locations"> < Back to Locations </a>
+            <h4> Edit Location {% print( data.val()["name"] ) %} </h4>
+
+            <form action="/locations/edit/{% print( data.key() ) %}" method="POST">
+            
+                <div class="mb-3"> 
+                    <label for="location_name"> Location Name </label>
+                    <input type="text" class="form-control" id="location_name" name = "location_name" value = "{% print(data.val()['name']) %}" placeholder="" required>
+                    <div class="invalid-feedback">
+                        Location name required.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="geo_location"> Location Geo (Lat,Lng) </label>
+                    <input type="text" class="form-control" id="geo_location" name = "geo_location" value = "{% print(data.val()['location']) %}" placeholder="" required>
+                    <div class="invalid-feedback">
+                        Location Geo Location required.
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type = "submit" id = "sign_in_button" class="col-sm-4 btn btn-block btn-primary btn-sm font-weight-medium auth-form-btn">
+                        Update Location <div id = "sign_in_load" class="lds-dual-ring"></div>
+                    </button>
+                </div>
+
+            </form>
+        
+            <form action="/locations/delete/{% print( data.key() ) %}" method="DELETE">
+                <button type = "submit" class="delete_text col-sm-12">
+                    Remove Location
+                </button>
+            </form>
+                    
+        </div>
+
+        <div class="col-sm-6">
+
+            <style>
+                /* Always set the map height explicitly to define the size of the div
+                * element that contains the map. */
+                #map {
+                    height: 100%;
+                }
+                /* Optional: Makes the sample page fill the window. */
+                html, body {
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                }
+            </style>
+        
+            <div id="map"></div>
+        
+        </div>
+    </div>
+
+        <script>
+            var map;
+            
+            function initMap() {
+
+                var myLatLng = {lat: -25.363, lng: 131.044};
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                center: myLatLng,
+                zoom: 8
+                });
+
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Hello World!'
+                });
+
+                marker.setMap(map);
+            }
+
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwuOMdmS1fHUiUju2mMm-_xdaYz9VDIi4&callback=initMap"
+        async defer></script>
+
+{% endblock %}

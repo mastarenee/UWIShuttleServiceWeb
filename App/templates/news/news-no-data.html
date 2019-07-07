@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+    {% block content %}
+    <h4> News </h4>
+
+    <div class="row text-center not-available">
+
+        <div class="col-sm-6">
+            <div class = "block-wrap padding">
+                <img src = "static/img/map-location.svg">
+                <h3> No News Found </h3>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class = "block-wrap padding">
+                <h3> New Alert </h3>
+                <p> Create a news article to alert users regarding information about the bus route. </p>
+                <a href = "{{ url_for('news_add') }}" class = "btn btn-primary"> Add A News Article </a>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %} 

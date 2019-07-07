@@ -1,0 +1,56 @@
+{% extends "template.html" %}
+  {% block content %}
+
+  
+  <div class = "row">
+      
+    <div class="col-sm-7"> 
+      <div class="row">
+      <div class = "col-sm-8"> 
+        <h4> Drivers </h4> 
+        <p> List of official drivers for UWI Shuttle Service </p>
+      </div>
+      <div class = "col-sm-4 text-right"> <a href = "{{ url_for('driver_add') }}"> New Drivers <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> </a> </div>
+     </div>
+    </div>
+
+    <div class="col-sm-7">
+      
+      {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">{{ message }}</div> 
+      {% endfor %}
+      
+      <div class = "card">
+      <div class="table-responsive">
+        <table class = "table table-hover display" style="width:100%" id = "studentRecords"> 
+          <tr>
+            <th scope="col"> Name </th>
+            <th scope="col"> Information </th>
+            <th scope="col"> Actions </th>
+          </tr>
+          <!-- For loop logic of jinja template -->
+          
+          {% for i in driversList %}
+            <tr> <td>{% print( driversList[i]['NAME'] ) %} </td> <td>{% print( i ) %} <br/> {% print( driversList[i]['PHONE'] ) %}  </td> 
+
+            <td> 
+              
+              {% if driversList[i]['DISABLED_TEXT'] == 'Enable': %}
+                <a href = "{{ url_for('drivers_enable',id = driversList[i]['UID'] ) }}"> 
+              {% else: %}
+                <a href = "{{ url_for('drivers_disable',id = driversList[i]['UID'] ) }}"> 
+              {% endif %}
+                
+                {% print( driversList[i]['DISABLED_TEXT'] ) %} </a> </td> </tr>
+          {% endfor%}
+         
+        </table> 
+      </div>
+    </div>
+  </div>
+
+    <div class="col-sm-5"> . </div>
+  
+  </div>
+
+  {% endblock %}

@@ -1,0 +1,74 @@
+<head>
+        <meta charset="utf-8" />
+        <title>Chart.js Example</title>
+        <!-- import plugin script -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="{{ url_for('static',     filename='js/Chart.min.js') }}"></script>
+        <script src="{{ url_for('static',     filename='js/utils.js') }}"></script>
+      </head>
+      The chart is then defined as a HTML5 canvas element:
+      
+      <h1>Simple Line Chart</h1>
+      <!-- bar chart canvas element -->
+      <canvas id="chart-area" width="600" height="400"></canvas>
+      <p id="caption">The chart is displaying a simple line chart.</p>
+      
+
+<script>
+
+jQuery(document).ready(function($){
+    
+    var _data;
+    var _labels;
+    
+    $.ajax({
+    url: "/get_chart_data",
+    type: "get",
+    data: {vals: ''},
+    success: function(response) {
+        full_data = JSON.parse(response.payload);
+        console.log(full_data)
+        _data = full_data['data'];
+        _labels = full_data['labels'];
+
+        console.log(_data)
+        console.log(_labels)
+
+        if (response){
+            runChart(_data, _labels);
+        }
+    },
+
+    });
+ 
+    function runChart(_data, _labels){
+		
+		var config = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: _data,
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: _labels
+			},
+			options: {
+				responsive: true
+			}
+		};
+
+		var ctx = document.getElementById('chart-area').getContext('2d');
+		window.myPie = new Chart(ctx, config);
+
+		var colorNames = Object.keys(window.chartColors);
+    }
+});
+        
+</script>

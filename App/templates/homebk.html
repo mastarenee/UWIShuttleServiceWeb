@@ -1,0 +1,224 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+
+    <div class="row">
+
+      <div class = "col-sm-4">
+
+        <h5 class = "text-small">UWI Shuttle Dashboard</h5>
+        <h4>Welcome {% print (username) %}</h4>
+        
+      </div>
+
+      <div class="col-sm-2 rate_wrap">
+
+        <span class = "rate_heading"> Registered Travallers </span>
+        <span class = "rate_metric"> 240 </span>
+        <small>  <span class="rate_metric_neg">-3.00%</span> (7 Days) </small>
+
+      </div>
+
+      <div class="col-sm-2 rate_wrap">
+
+        <span class = "rate_heading"> Late Rate </span>
+        <span class = "rate_metric"> 4 </span>
+        <small>  <span class="rate_metric_pos">+13.00%</span> (7 Days) </small>
+
+      </div>
+
+      <div class="col-sm-2 rate_wrap">
+
+        <span class = "rate_heading"> Routes Completed </span>
+        <span class = "rate_metric"> 6/12 </span>
+        <small>  <span class="rate_metric_pos">+13.00%</span> (7 Days) </small>
+
+      </div>
+
+    </div>
+
+    <hr/>
+
+    <div class="row"> 
+      
+      <div class = "col-sm-12">
+        <h6> Current Bus Routes </h6>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+            <h5 class="card-title"> Bridgetown </h5>
+            <div class="card-text card-stats">
+              <div> Total Students: <span class = "float-right">50</span> </div>
+              <div> Total Trips: <span class = "float-right">5</span> </div>
+              <div> Avg Students Per Trip: <span class = "float-right">10</span> </div>
+              <br/>
+              <p class = "text-bold"> Next Trip at 3:30 PM </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+            <h5 class="card-title"> Warrens </h5>
+            <div class="card-text card-stats">
+              <div> Total Students: <span class = "float-right">80</span> </div>
+              <div> Total Trips: <span class = "float-right">8</span> </div>
+              <div> Avg Students Per Trip: <span class = "float-right">10</span> </div>
+              <br/>
+              <p class = "text-bold"> Next Trip at 4:30 PM </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+            <h5 class="card-title"> NCF </h5>
+            <div class="card-text card-stats">
+              <div> Total Students: <span class = "float-right">20</span> </div>
+              <div> Total Trips: <span class = "float-right">2</span> </div>
+              <div> Avg Students Per Trip: <span class = "float-right">10</span> </div>
+              <br/>
+              <p class = "text-bold"> Next Trip at 3:30 PM </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+ 
+      <!-- import plugin script -->   
+      <script src="{{ url_for('static',     filename='js/Chart.min.js') }}"></script>
+      <script src="{{ url_for('static',     filename='js/utils.js') }}"></script>
+ 
+      <!-- bar chart canvas element -->
+      <div class="row chart_wrap hidden">
+
+          <div class = "col-sm-10">
+            <h5> Student Travel Load </h5>
+            <p> The total number of students travelling on all of the routes daily. Get an accurate measurement of the peek times students travel. </p>
+          </div>
+
+          <div class = "col-sm-2 float-right"> 
+              <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Last 7 Days</a>
+                    <a class="dropdown-item" href="#">1 Month</a>
+                    <a class="dropdown-item" href="#">3 Months</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Get Deep Insights</a>
+                  </div>
+                </div>
+          </div>
+
+          <div class="col-sm-12"> 
+              <canvas id="chart" width="600" height="200"></canvas>
+          </div>
+        </div>
+
+      <script>
+        
+        var DATA_COUNT = 12;
+
+        var utils = Samples.utils;
+
+        utils.srand(110);
+
+        function alternatePointStyles(ctx) {
+          var index = ctx.dataIndex;
+          return index % 2 === 0 ? 'circle' : 'rect';
+        }
+
+        function makeHalfAsOpaque(ctx) {
+          var c = ctx.dataset.backgroundColor;
+          return utils.transparentize(c);
+        }
+
+        function adjustRadiusBasedOnData(ctx) {
+          var v = ctx.dataset.data[ctx.dataIndex];
+          return v < 10 ? 5
+            : v < 25 ? 7
+            : v < 50 ? 9
+            : v < 75 ? 11
+            : 15;
+        }
+
+        function generateData() {
+          return utils.numbers({
+            count: DATA_COUNT,
+            min: 0,
+            max: 100
+          });
+        }
+
+        var data = {
+          labels: utils.months({count: DATA_COUNT}),
+          datasets: [{
+            data: generateData(),
+            backgroundColor: '#4dc9f6',
+            borderColor: '#4dc9f6',
+          }]
+        };
+
+        var options = {
+          elements: {
+            line: {
+              fill: false,
+              display: false
+            },
+            point: {
+              hoverBackgroundColor: makeHalfAsOpaque,
+              radius: adjustRadiusBasedOnData,
+              pointStyle: alternatePointStyles,
+              hoverRadius: 15,
+            }
+          }
+        };
+
+        var chart = new Chart('chart', {
+          type: 'line',
+          data: data,
+          options:options
+        });
+
+
+
+        // eslint-disable-next-line no-unused-vars
+        function addDataset() {
+          var newColor = utils.color(chart.data.datasets.length);
+
+          chart.data.datasets.push({
+            data: generateData(),
+            backgroundColor: newColor,
+            borderColor: newColor
+          });
+          chart.update();
+        }
+
+        // eslint-disable-next-line no-unused-vars
+        function randomize() {
+          chart.data.datasets.forEach(function(dataset) {
+            dataset.data = generateData();
+          });
+          chart.update();
+        }
+
+        // eslint-disable-next-line no-unused-vars
+        function removeDataset() {
+          chart.data.datasets.shift();
+          chart.update();
+        }
+
+      </script>
+
+    </div>
+
+    {% endblock %}

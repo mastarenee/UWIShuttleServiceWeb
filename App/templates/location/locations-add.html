@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+    {% block content %}
+   
+    <div class="col-sm-6">
+        <h4> Add Location </h4>
+
+        <form action="{{ url_for('template') }}" method="post">
+        
+            <div class="mb-3">
+                <label for="location_name"> Location Name </label>
+                <input type="text" class="form-control" id="location_name" name = "location_name" placeholder="" required>
+                <div class="invalid-feedback">
+                    Location name required.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="geo_location"> Location Geo (Lat,Lng) </label>
+                <input type="text" class="form-control" id="geo_location" name = "geo_location" placeholder="" required>
+                <div class="invalid-feedback">
+                    Location Geo Location required.
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type = "submit" id = "sign_in_button" class="col-sm-4 btn btn-block btn-primary btn-sm font-weight-medium auth-form-btn">
+                    Create Location <div id = "sign_in_load" class="lds-dual-ring"></div>
+                </button>
+            </div>
+
+        </form>
+      
+    </div>
+
+{% endblock %}

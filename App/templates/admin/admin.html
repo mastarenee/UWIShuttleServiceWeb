@@ -1,0 +1,50 @@
+{% extends "template.html" %}
+  {% block content %}
+  
+  <div class = "row">
+
+    <div class="col-sm-7"> 
+
+        {% for message in get_flashed_messages() %}
+          <div class="alert alert-danger">{{ message }}</div> 
+        {% endfor %}
+
+      <div class="row">
+      <div class = "col-sm-8"> <h4> Admin Management </h4> </div>
+      <div class = "col-sm-4 text-right"> <a href = "{{ url_for('admin_user_add') }}"> New Admin <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> </a> </div>
+     </div>
+    </div>
+
+    <div class="col-sm-7">
+      <div class = "row">
+        {% for user in adminus: %}
+        {% if user["display_name"] != 'None': %}
+        <div class="col-sm-12 admin_wrap">
+          <div class="card">
+          
+            <div class="card-body row">
+                <div class="col-sm-9">
+                  
+                  <h5 class="card-title"> {% print(user["display_name"] ) %} </h5>
+                  <p class="card-text"> {% print( user["email"] ) %} </p>
+                </div>
+
+                <div class="col-sm-3 text-right"><br/>
+                  <a class="btn btn-primary btn-sm" href = "admin/update/{% print( user['uid'] ) %}"> View User </a>
+                </div>
+
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+        {% endfor %}
+      
+      </div>
+    </div>
+
+    <div class="col-sm-5"> </div>
+  
+  </div>
+
+  {% endblock %}

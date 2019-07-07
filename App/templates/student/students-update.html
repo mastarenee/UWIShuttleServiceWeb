@@ -1,0 +1,161 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+    <h4 class = "col-sm-12"> Update Student</h4>
+<div class="row">
+
+
+      {% for message in get_flashed_messages() %}
+        <div class="col-sm-12 alert alert-success">{{ message }}</div> 
+      {% endfor %}
+    
+      
+    <div class = "col-sm-8 card shadow">
+    
+        <div class="card-body">
+    <form class="needs-validation" method = "POST" action = "{{ url_for('students_update_complete', id = studentid) }}" novalidate>
+    
+    <div class="row">
+        <div class="col-md-12 mb-3">
+        <label for="firstName">Full Name</label>
+        <input type="text" class="form-control" id="name" name = "name" placeholder="" value="{% print( student_info['NAME'] ) %}" required>
+        <div class="invalid-feedback">
+            Valid name is required.
+        </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="email" name = "email" value = "{% print( studentid.split('@')[0] ) %}" placeholder="john.doe" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <span class="input-group-text" id="basic-addon2">@mycavehill.uwi.edu</span>
+        </div>
+    </div>
+          
+          
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+        <label for="gender">Gender</label>
+        <select class="custom-select d-block w-100" id="sex" name = "sex" required>
+            {% for gender in genderOptions: %}
+                {% if gender == student_info['SEX']: %}
+                    <option selected>{% print(gender) %}</option>
+                {% else: %}
+                    <option value = "{% print(gender) %}">{% print(gender) %}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please select a gender.
+        </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+        <label for="level">Level</label>
+        <select class="custom-select d-block w-100" id="level" name = "level" required>
+            {% for level in levelOptions: %}
+                {% if level == student_info['LEVEL']: %}
+                    <option selected>{% print(level) %}</option>
+                {% else: %}
+                    <option value = "{% print(level) %}">{% print(level) %}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            ID required.
+        </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="faculty">Faculty</label>
+            <select class="custom-select d-block w-100" id="faculty" name = "faculty" required>
+                {% for faculty in facultyOptions: %}
+                    {% if faculty == student_info['FACULTY']: %}
+                        <option selected>{% print(faculty) %}</option>
+                    {% else: %}
+                        <option value = "{% print(faculty) %}">{% print(faculty) %}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                Please provide a valid Faculty.
+            </div>
+        </div>
+            
+    </div>
+
+    <hr class="mb-4">
+
+    <div class="row">
+
+        <div class="col-sm-4"> 
+            <h6> Student ID </h6>
+            
+                <input class="form-control" type="text" value="{% print( student_info['UID']) %}" id="uid" name = "uid">
+        </div>
+
+        <div class="col-sm-4"> 
+            <h6> Arrears </h6>
+            
+            <div class="custom-control custom-radio">
+                {% if student_info['ARREARS'] == true: %}
+                    <input type="radio" class="custom-control-input" id="inarrears" name="arrears" value = "True" checked required>
+                {% else: %}
+                    <input type="radio" class="custom-control-input" id="inarrears" name="arrears" value = "True" required>
+                {% endif %}
+                <label class="custom-control-label" for="inarrears"> Has Arrears </label>
+            </div>
+
+            <div class="custom-control custom-radio mb-3">
+                {% if student_info['ARREARS'] == false: %}
+                    <input type="radio" class="custom-control-input" id="notinarrears" name="arrears" value = "False" checked required>
+                {% else: %}
+                    <input type="radio" class="custom-control-input" id="notinarrears" name="arrears" value = "False" required>
+                {% endif %}
+                <label class="custom-control-label" for="notinarrears">No Arrears</label>
+            </div>
+                
+        </div>
+        
+    </div>
+
+    <hr class="mb-4">
+    <button class="btn btn-primary btn-lg btn-block" type="submit"> Update Student </button>
+    </form>
+</div>
+    </div>
+
+    
+
+    <div class="col-sm-4">
+
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{% print( student_info['IMAGE_URL'] ) %}" alt="">
+            <div class="card-body">
+                <h6 class="card-title">Student Logs for {% print( student_info['NAME'] ) %}</h6>
+                <form class="needs-validation" method = "POST" action = "{{ url_for('students_update_complete_image', id = studentid) }}" enctype="multipart/form-data" novalidate>
+                    <input type="file" name="profile_image" id="profile_image">
+                    <button type = "submit" class="btn btn-sm btn-primary"> Update Image </button>
+                </form>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for i in bus_options: %}
+                    <li class="list-group-item d-flex list-group-item-primary justify-content-between align-items-center">
+                        {% print(i[0]) %}
+                        <span class="badge badge-primary badge-pill">{% print(i[1]) %} Trips</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+          
+        </div>
+            
+        
+    </div>
+</div>
+
+<br/>
+<br/>
+
+    {% endblock %}

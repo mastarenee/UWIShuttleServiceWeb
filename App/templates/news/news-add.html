@@ -1,0 +1,65 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+    
+  <div class="row">
+    <div class = "col-sm-7">
+      
+    <h4> Create a new article / alert </h4>
+
+    </div>
+
+    <div class = "col-sm-8 card shadow">    
+    <div class="card-body">
+
+    {% print(error) %}
+
+    <form class="pt-3 needs-validation" id = "newsForm" action = "{{ url_for('news_add') }}" method="POST"> 
+
+    <div class="mb-3">
+      <label for="news_name">Title</label>
+      <input type="text" class="form-control" id="news_name" name = "news_name" required>
+      <div class="invalid-feedback" style="width: 100%;">
+          Title is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description">Description <span class="text-muted">(Optional)</span></label>
+      <textarea class="form-control" id="description" rows="3" name = "description"></textarea>
+    </div>
+
+    <div class = "row">
+      <div class="col-sm-6">
+        <label for="expires">Expiry </label>
+        <input type="text" class="form-control" id="expires" autocomplete="off" name = "expires" required>
+        <p class = "text-small"> Time for news to be displayed to the students </p>
+      </div>
+    </div>
+    
+    <button class="btn-complete btn btn-primary btn-lg btn-block" type="submit"> Send News </button>
+    <p class = "text-small"> Please note that on send a notification will be sent to all students. </p>
+    </form>
+    </div>
+
+  </div>
+</div></div>
+
+  <script>
+
+    $(document).ready(function () {
+
+      var nowTemp = new Date();
+      var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+      $('#expires').datepicker({
+          format: "dd/mm/yyyy",
+          onRender: function(date) {
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+          }
+      });
+    });
+
+  </script>
+
+  {% endblock %}

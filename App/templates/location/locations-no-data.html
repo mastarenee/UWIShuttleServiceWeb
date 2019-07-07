@@ -1,0 +1,12 @@
+{% extends "template.html" %}
+    {% block content %}
+    <h4> Locations </h4>
+
+    <div class="col-sm-12 text-center not-available">
+        <img src = "static/img/map-location.svg">
+        <h3> No Locations Found </h3>
+        <p> Setup a location to get started adding a location to your bus route. </p>
+        <a href = "/locations/add" class = "btn btn-primary"> Add A Location </a>
+    </div>
+    
+    {% endblock %} 

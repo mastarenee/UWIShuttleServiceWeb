@@ -1,0 +1,76 @@
+{% extends "template.html" %}
+  {% block content %}
+
+  
+  <div class = "row">
+      
+    <div class="col-sm-7"> 
+      <div class="row">
+      <div class = "col-sm-8"> <h4> User Logs </h4> </div>
+     </div>
+    </div>
+
+    <div class = "col-sm-12 card shadow">
+        
+        <div class="card-body">
+      
+        <div class="table-responsive">
+            <table class = "table table-hover display" style="width:100%" id = "studentRecords"> 
+              <tr>
+                <th scope="col"> Section </th>
+                <th scope="col"> Action </th>
+                <th scope="col"> User </th>
+                <th scope="col"> Agent </th>
+                <th scope="col"> Timestamp </th>
+              </tr>
+              <!-- For loop logic of jinja template -->
+              
+              {% for log in logs2 %}
+                <tr>
+                  <td colspan = "5" class = "boldme">{% print( log.id ) %} </td>
+                </tr>
+                  {% for i in log.to_dict() %}
+
+                  <tr>
+                    <td>{% print( log.to_dict()[i]['location'] ) %} </td>
+                    <td>{% print( log.to_dict()[i]['action'] ) %} </td>
+                    <td>{% print( log.to_dict()[i]['user'] ) %} </td>
+                    <td>{% print( log.to_dict()[i]['agent'] ) %} </td>
+                    <td>{% print( i ) %} </td>
+                    
+                  </tr>
+                  
+                  {% endfor%}
+                
+              {% endfor%}
+             
+            </table> 
+          </div>
+        </div>
+        
+      <!--<div class="table-responsive">
+        <table class = "table table-hover display" style="width:100%" id = "studentRecords"> 
+          <tr>
+            <th scope="col"> Section </th>
+            <th scope="col"> Action </th>
+            <th scope="col"> User </th>
+            <th scope="col"> Timestamp </th>
+          </tr>
+          
+          {% for log in logs %}
+            <tr>
+              <td>{% print( log[0] ) %} </td>
+              <td>{% print( log[3] + " " + log[2] ) %} </td>
+              <td>{% print( log[1] ) %} </td>
+              <td>{% print( log[4] ) %} </td>
+            </tr>
+          {% endfor%}
+         
+        </table> 
+      </div>-->
+          
+    </div>
+  
+  </div>
+
+  {% endblock %}

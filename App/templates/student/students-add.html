@@ -1,0 +1,101 @@
+{% extends "template.html" %}
+    {% block content %}
+    <h4 class = "col-sm-12"> New Student </h4>
+
+    <div class = "col-sm-8 card shadow">
+    
+        <div class="card-body">
+        
+    <form class="needs-validation" method = "POST" action = "{{ url_for('students_add_new') }}" enctype="multipart/form-data" novalidate>
+    
+    
+    <div class="form-group col-sm-12">
+        <label for="image">Profile Image</label>
+        <input type=file name=myFile>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-md-12 mb-3">
+        <label for="firstName">Full Name</label>
+        <input type="text" class="form-control" id="name" name = "name" placeholder="" value="" required>
+        <div class="invalid-feedback">
+            Valid first name is required.
+        </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="email" name = "email" placeholder="john.doe" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <span class="input-group-text" id="basic-addon2">@mycavehill.uwi.edu</span>
+        </div>
+    </div>
+          
+
+    <div class="row">
+        <div class="col-md-5 mb-3">
+        <label for="gender">Gender</label>
+        <select class="custom-select d-block w-100" id="gender" name = "gender" required>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+        <div class="invalid-feedback">
+            Please select a gender.
+        </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+        <label for="faculty">Faculty</label>
+        <select class="custom-select d-block w-100" id="faculty" name = "faculty" required>
+            <option>Science & Technology</option>
+            <option>Law</option>
+            <option>Medicine</option>
+            <option>Humanities & Education</option>
+            <option>Social Sciences</option>
+        </select>
+        <div class="invalid-feedback">
+            Please provide a valid Faculty.
+        </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+        <label for="level">Level</label>
+        <select class="custom-select d-block w-100" id="level" name = "level" required>
+            <option>Undergraduate</option>
+            <option>Masters</option>
+            <option>PhD</option>
+        </select>
+        <div class="invalid-feedback">
+            ID required.
+        </div>
+        </div>
+    </div>
+
+    <hr class="mb-4">
+
+    <div class="row">
+
+        <div class="col-sm-4"> 
+            <h6> Student ID </h6>
+            
+                <input class="form-control" type="number" max = "10" value="" id="uid" name = "uid">
+        </div>
+
+        <div class="col-sm-4"> 
+            <h6> Arrears </h6>
+            <input type="radio" id="inarrears" name="arrears" value = "True"> In Arrears <br/>
+            <input type="radio" id="notinarrears" name="arrears" value = "False"> Not In Arrears
+                
+        </div>
+
+    </div>
+
+    <hr class="mb-4">
+    <button class="btn btn-primary btn-lg btn-block" type="submit"> Add Student </button>
+    </form>
+    </div>
+</div>
+
+{% endblock %}

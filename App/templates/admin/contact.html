@@ -1,0 +1,59 @@
+
+    {% extends "template.html" %}
+    {% block content %}
+    
+    <div class = "col-sm-8">
+
+        <h4> Contact Support </h4>
+        <p> Get in touch with the developers to report any issues, request new features or to request assistance. </p>
+
+    </div>
+
+    <div class = "col-sm-8 card shadow">    
+            <div class="card-body">
+            
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-info">{{ message }}</div> 
+    {% endfor %}
+
+    <form class="needs-validation" method = "POST" action = "{{ url_for('sendMail') }}" novalidate>
+    
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+
+            <div class="col-md-12 mb-3">
+                <label for="name"> {{ form.name.label }} </label>
+                {{ form.name(class_='form-control') }}
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label for="email"> {{ form.email.label }} </label> 
+                {{ form.email(class_='form-control') }}
+            </div>
+    
+            <div class="col-md-12 mb-3">
+                <label for="subject"> {{ form.subject.label }} </label> 
+                {{ form.subject(class_='form-control') }}
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label for="message"> {{ form.message.label }} </label> 
+                {{ form.message(class_='form-control') }}
+            </div>
+
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit"> Send Message </button>
+    </form>
+    </div>
+</div>
+
+<br/>
+
+<br/>
+
+    {% endblock %}
+
+</body>
+</html>
